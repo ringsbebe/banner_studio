@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Banner Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f11;--panel:#1a1a1f;--panel2:#22222a;--border:#2e2e3a;
+  --accent:#c9973a;--accent2:#e8b84b;--text:#e8e8f0;--muted:#7a7a8e;
+  --green:#3ecf8e;--blue:#5b8dee;--r:7px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;overflow:hidden}
+.studio{display:flex;height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:320px;min-width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.s-hd{padding:11px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.s-title{font-size:11px;font-weight:700;letter-spacing:.1em}
+.s-scroll{flex:1;overflow-y:auto;padding:8px}
+.s-scroll::-webkit-scrollbar{width:3px}
+.s-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* SECTION */
+.sec{border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;cursor:pointer;background:var(--panel2);user-select:none}
+.sec-hd:hover{background:#262630}
+.sec-lbl{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--muted);text-transform:uppercase}
+.badge{font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700}
+.b-gold{background:rgba(201,151,58,.18);color:var(--accent2)}
+.b-green{background:rgba(62,207,142,.12);color:var(--green)}
+.arr{font-size:9px;color:var(--muted);transition:transform .18s}
+.arr.o{transform:rotate(180deg)}
+.sec-body{padding:10px;display:none;flex-direction:column;gap:8px}
+.sec-body.o{display:flex}
+
+/* TEXT BLOCK — 每個文字單元 */
+.txt-block{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:9px;display:flex;flex-direction:column;gap:7px}
+.txt-block-label{font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;display:flex;align-items:center;gap:5px}
+.tag{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700}
+.tag-serif{background:rgba(201,151,58,.2);color:var(--accent2)}
+.tag-sans{background:rgba(91,141,238,.18);color:var(--blue)}
+
+/* FIELDS */
+.fl{font-size:9px;color:var(--muted);margin-bottom:1px;display:block}
+input[type=text]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:5px 8px;color:var(--text);font-size:12px;font-family:'Noto Sans TC',sans-serif;outline:none}
+input[type=text]:focus{border-color:var(--accent)}
+
+/* SLIDER */
+.sr{display:flex;flex-direction:column;gap:2px}
+.sr-t{display:flex;justify-content:space-between}
+.sr-t span{font-size:9px;color:var(--muted)}
+.sv{font-size:9px;color:var(--accent);font-weight:700;min-width:36px;text-align:right}
+input[type=range]{width:100%;-webkit-appearance:none;height:2px;border-radius:2px;background:var(--border);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;border:2px solid var(--panel2)}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+/* COLOR */
+.cr{display:flex;align-items:center;gap:5px}
+.cs{width:20px;height:20px;border-radius:4px;border:1px solid var(--border);overflow:hidden;position:relative;flex-shrink:0;cursor:pointer}
+.cs input[type=color]{position:absolute;inset:-4px;width:calc(100%+8px);height:calc(100%+8px);opacity:0;cursor:pointer;border:none;padding:0}
+.cp{width:100%;height:100%;pointer-events:none}
+.cx{font-size:9px;color:var(--muted);font-family:monospace;flex:1}
+.swatches{display:flex;gap:3px}
+.sw{width:16px;height:16px;border-radius:3px;cursor:pointer;border:1.5px solid transparent;transition:border .12s;flex-shrink:0}
+.sw:hover,.sw.on{border-color:#fff}
+/* WEIGHT SELECTOR */
+.wg{display:flex;gap:3px;flex-wrap:wrap}
+.wb{padding:3px 7px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:9px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .12s;line-height:1.4}
+.wb.on{border-color:var(--accent);color:var(--accent);background:rgba(201,151,58,.1)}
+.wb:hover:not(.on){color:var(--text);border-color:#555}
+
+/* TEMPLATES */
+.tpl-row{display:flex;gap:5px}
+.tb{flex:1;padding:6px;border-radius:6px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;transition:all .15s}
+.tb.on{border-color:var(--accent);color:var(--accent);background:rgba(201,151,58,.08)}
+.tb:hover:not(.on){border-color:var(--text);color:var(--text)}
+
+/* TOGGLE */
+.trow{display:flex;align-items:center;justify-content:space-between}
+.tlabel{font-size:10px;color:var(--muted)}
+.tog{width:30px;height:17px;border-radius:9px;background:var(--border);cursor:pointer;position:relative;border:none;transition:background .18s;flex-shrink:0}
+.tog.on{background:var(--accent)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff;transition:transform .18s}
+.tog.on::after{transform:translateX(13px)}
+
+/* DROP ZONE */
+.dz{border:1.5px dashed var(--border);border-radius:6px;padding:11px;text-align:center;cursor:pointer;position:relative;transition:all .15s}
+.dz:hover,.dz.over{border-color:var(--accent);background:rgba(201,151,58,.04)}
+.dz.loaded{border-color:var(--green);border-style:solid;background:rgba(62,207,142,.04)}
+.dz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:15px;margin-bottom:2px}
+.dz-text{font-size:9px;color:var(--muted)}
+.dz-name{font-size:9px;color:var(--green);margin-top:2px;font-weight:700}
+
+.div{border:none;border-top:1px solid var(--border)}
+
+/* CANVAS */
+.carea{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#080809}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border);background:var(--panel);flex-shrink:0}
+.tinfo{font-size:10px;color:var(--muted);font-family:monospace}
+.btn-dl{padding:7px 16px;border-radius:6px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1000;font-size:11px;font-weight:900;cursor:pointer;font-family:'Noto Sans TC',sans-serif;letter-spacing:.05em}
+.btn-dl:hover{opacity:.85}
+.cwrap{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;overflow:hidden}
+canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,.7)}
+</style>
+</head>
+<body>
+<div class="studio">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="s-hd"><div class="dot"></div><span class="s-title">BANNER STUDIO</span></div>
+  <div class="s-scroll">
+
+    <!-- TEMPLATES -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl">⚡ 模版</div><span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+        <div class="tpl-row">
+          <button class="tb on" id="tpl-award" onclick="applyTpl('award')">🏆 得獎賀圖</button>
+          <button class="tb" id="tpl-book" onclick="applyTpl('book')">📖 新書上市</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BG -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl">🖼 底圖</div><span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+        <div class="dz" id="bgDrop">
+          <input type="file" accept="image/*" onchange="loadImg(this.files[0],'bg')">
+          <div class="dz-icon">🗂</div><div class="dz-text">拖曳或點擊上傳底圖</div>
+          <div class="dz-name" id="bgName"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl">📚 書封 1</div><span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+        <div class="dz" id="prodDrop">
+          <input type="file" accept="image/*" onchange="loadImg(this.files[0],'prod')">
+          <div class="dz-icon">📦</div><div class="dz-text">拖曳或點擊上傳書封</div>
+          <div class="dz-name" id="prodName"></div>
+        </div>
+        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="pSV">70%</span></div>
+          <input type="range" min="10" max="150" value="70" id="pS" oninput="upd('pS','pSV','%');render()"></div>
+        <div class="g2">
+          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="pXV">280</span></div>
+            <input type="range" min="-200" max="1000" value="280" id="pX" oninput="upd('pX','pXV','');render()"></div>
+          <div class="sr"><div class="sr-t"><span>垂直位移 Y</span><span class="sv" id="pYV">0</span></div>
+            <input type="range" min="-400" max="400" value="0" id="pY" oninput="upd('pY','pYV','');render()"></div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 書封 2 -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl">📗 書封 2</div><span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+        <div class="dz" id="prod2Drop">
+          <input type="file" accept="image/*" onchange="loadImg(this.files[0],'prod2')">
+          <div class="dz-icon">📗</div><div class="dz-text">拖曳或點擊上傳第二本書封</div>
+          <div class="dz-name" id="prod2Name"></div>
+        </div>
+        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="p2SV">70%</span></div>
+          <input type="range" min="10" max="150" value="70" id="p2S" oninput="upd('p2S','p2SV','%');render()"></div>
+        <div class="g2">
+          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="p2XV">500</span></div>
+            <input type="range" min="-200" max="1000" value="500" id="p2X" oninput="upd('p2X','p2XV','');render()"></div>
+          <div class="sr"><div class="sr-t"><span>垂直位移 Y</span><span class="sv" id="p2YV">0</span></div>
+            <input type="range" min="-400" max="400" value="0" id="p2Y" oninput="upd('p2Y','p2YV','');render()"></div>
+        </div>
+      </div>
+    </div>
+    <!-- ── 主標題行 ── -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl"><span>★ 主標題行</span><span class="badge b-gold">狂賀！＋獎項名</span></div>
+        <span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+
+        <!-- 狂賀！ -->
+        <div class="txt-block">
+          <div class="txt-block-label">狂賀！<span class="tag tag-serif">明體 Serif</span></div>
+          <div>
+            <label class="fl">文字</label>
+            <input type="text" id="t0txt" value="狂賀!" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="t0cp" style="background:#e8b84b"></div>
+              <input type="color" value="#e8b84b" id="t0c" oninput="sc('t0c','t0cp','t0cx');render()"></div>
+            <span class="cx" id="t0cx">#E8B84B</span>
+            <div class="swatches">
+              <div class="sw on" style="background:#e8b84b" onclick="setSw('t0c','t0cp','t0cx','#e8b84b',this)"></div>
+              <div class="sw" style="background:#c9973a" onclick="setSw('t0c','t0cp','t0cx','#c9973a',this)"></div>
+              <div class="sw" style="background:#FFEA00" onclick="setSw('t0c','t0cp','t0cx','#FFEA00',this)"></div>
+            </div>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="t0szV">220px</span></div>
+            <input type="range" min="60" max="280" value="220" id="t0sz" oninput="upd('t0sz','t0szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="t0wg"><button class="wb" onclick="setW('t0w','300',this)">細</button><button class="wb" onclick="setW('t0w','400',this)">Regular</button><button class="wb" onclick="setW('t0w','500',this)">Medium</button><button class="wb" onclick="setW('t0w','700',this)">粗</button><button class="wb on" onclick="setW('t0w','900',this)">Black</button></div>
+            <input type="hidden" id="t0w" value="900">
+          </div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t0xV">25</span></div>
+              <input type="range" min="0" max="1850" value="25" id="t0x" oninput="upd('t0x','t0xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="t0yV">330</span></div>
+              <input type="range" min="40" max="1040" value="330" id="t0y" oninput="upd('t0y','t0yV','');render()"></div>
+          </div>
+        </div>
+
+        <!-- 獎項名 -->
+        <div class="txt-block">
+          <div class="txt-block-label">獎項名稱<span class="tag tag-sans">黑體 Sans</span></div>
+          <div>
+            <label class="fl">文字</label>
+            <input type="text" id="t1txt" value="2026金鼎獎" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="t1cp" style="background:#e8b84b"></div>
+              <input type="color" value="#e8b84b" id="t1c" oninput="sc('t1c','t1cp','t1cx');render()"></div>
+            <span class="cx" id="t1cx">#E8B84B</span>
+            <div class="swatches">
+              <div class="sw on" style="background:#e8b84b" onclick="setSw('t1c','t1cp','t1cx','#e8b84b',this)"></div>
+              <div class="sw" style="background:#c9973a" onclick="setSw('t1c','t1cp','t1cx','#c9973a',this)"></div>
+              <div class="sw" style="background:#FFEA00" onclick="setSw('t1c','t1cp','t1cx','#FFEA00',this)"></div>
+            </div>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="t1szV">165px</span></div>
+            <input type="range" min="30" max="220" value="165" id="t1sz" oninput="upd('t1sz','t1szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="t1wg"><button class="wb" onclick="setW('t1w','300',this)">細</button><button class="wb" onclick="setW('t1w','400',this)">Regular</button><button class="wb" onclick="setW('t1w','500',this)">Medium</button><button class="wb" onclick="setW('t1w','700',this)">粗</button><button class="wb on" onclick="setW('t1w','900',this)">Black</button></div>
+            <input type="hidden" id="t1w" value="900">
+          </div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t1xV">604</span></div>
+              <input type="range" min="0" max="1850" value="604" id="t1x" oninput="upd('t1x','t1xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="t1yV">338</span></div>
+              <input type="range" min="40" max="1040" value="338" id="t1y" oninput="upd('t1y','t1yV','');render()"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 得獎資訊 1 ── -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl"><span>▸ 得獎資訊 1</span><span class="badge b-green">明體金＋黑體白</span></div>
+        <span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+
+        <!-- 第1行：明體霧面金 -->
+        <div class="txt-block">
+          <div class="txt-block-label">榮獲單位<span class="tag tag-serif">明體 Serif · 霧面金</span></div>
+          <div>
+            <label class="fl">文字</label>
+            <input type="text" id="a1txt" value="親子天下有聲故事書榮獲" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="a1cp" style="background:#e8b84b"></div>
+              <input type="color" value="#e8b84b" id="a1c" oninput="sc('a1c','a1cp','a1cx');render()"></div>
+            <span class="cx" id="a1cx">#E8B84B</span>
+            <div class="swatches">
+              <div class="sw" style="background:#c9973a" onclick="setSw('a1c','a1cp','a1cx','#c9973a',this)"></div>
+              <div class="sw" style="background:#e8b84b" onclick="setSw('a1c','a1cp','a1cx','#e8b84b',this)"></div>
+              <div class="sw" style="background:#ffffff" onclick="setSw('a1c','a1cp','a1cx','#ffffff',this)"></div>
+            </div>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="a1szV">90px</span></div>
+            <input type="range" min="20" max="140" value="90" id="a1sz" oninput="upd('a1sz','a1szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="a1wg"><button class="wb" onclick="setW('a1w','300',this)">細</button><button class="wb" onclick="setW('a1w','400',this)">Regular</button><button class="wb" onclick="setW('a1w','500',this)">Medium</button><button class="wb on" onclick="setW('a1w','700',this)">粗</button><button class="wb" onclick="setW('a1w','900',this)">Black</button></div>
+            <input type="hidden" id="a1w" value="700">
+          </div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="a1xV">618</span></div>
+              <input type="range" min="0" max="1850" value="618" id="a1x" oninput="upd('a1x','a1xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="a1yV">530</span></div>
+              <input type="range" min="40" max="1040" value="530" id="a1y" oninput="upd('a1y','a1yV','');render()"></div>
+          </div>
+        </div>
+
+        <!-- 第2行：黑體亮白 -->
+        <div class="txt-block">
+          <div class="txt-block-label">獎項說明<span class="tag tag-sans">黑體 Sans · 亮白</span></div>
+          <div>
+            <label class="fl">文字</label>
+            <input type="text" id="a2txt" value="2026金鼎獎，數位出版類：數位創新獎" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="a2cp" style="background:#ffffff"></div>
+              <input type="color" value="#ffffff" id="a2c" oninput="sc('a2c','a2cp','a2cx');render()"></div>
+            <span class="cx" id="a2cx">#FFFFFF</span>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="a2szV">62px</span></div>
+            <input type="range" min="16" max="100" value="62" id="a2sz" oninput="upd('a2sz','a2szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="a2wg"><button class="wb" onclick="setW('a2w','300',this)">細</button><button class="wb" onclick="setW('a2w','400',this)">Regular</button><button class="wb on" onclick="setW('a2w','500',this)">Medium</button><button class="wb" onclick="setW('a2w','700',this)">粗</button><button class="wb" onclick="setW('a2w','900',this)">Black</button></div>
+            <input type="hidden" id="a2w" value="500">
+          </div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="a2xV">618</span></div>
+              <input type="range" min="0" max="1850" value="618" id="a2x" oninput="upd('a2x','a2xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="a2yV">625</span></div>
+              <input type="range" min="40" max="1040" value="625" id="a2y" oninput="upd('a2y','a2yV','');render()"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── 得獎資訊 2 ── -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl"><span>▸ 得獎資訊 2</span><span class="badge b-green">明體金＋黑體白</span></div>
+        <span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+
+        <!-- 書名列：明體霧面金，| 換行 -->
+        <div class="txt-block">
+          <div class="txt-block-label">書名列<span class="tag tag-serif">明體 Serif · 霧面金 · | 換行</span></div>
+          <div>
+            <label class="fl">文字（用 | 分隔換行）</label>
+            <input type="text" id="b1txt" value="〈親子天下〉、〈小行星幼兒誌〉、|〈真的？假的？破解假訊息的數位思辨力〉" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="b1cp" style="background:#e8b84b"></div>
+              <input type="color" value="#e8b84b" id="b1c" oninput="sc('b1c','b1cp','b1cx');render()"></div>
+            <span class="cx" id="b1cx">#E8B84B</span>
+            <div class="swatches">
+              <div class="sw" style="background:#c9973a" onclick="setSw('b1c','b1cp','b1cx','#c9973a',this)"></div>
+              <div class="sw" style="background:#e8b84b" onclick="setSw('b1c','b1cp','b1cx','#e8b84b',this)"></div>
+              <div class="sw" style="background:#ffffff" onclick="setSw('b1c','b1cp','b1cx','#ffffff',this)"></div>
+            </div>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="b1szV">68px</span></div>
+            <input type="range" min="16" max="100" value="68" id="b1sz" oninput="upd('b1sz','b1szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="b1wg"><button class="wb" onclick="setW('b1w','300',this)">細</button><button class="wb" onclick="setW('b1w','400',this)">Regular</button><button class="wb" onclick="setW('b1w','500',this)">Medium</button><button class="wb on" onclick="setW('b1w','700',this)">粗</button><button class="wb" onclick="setW('b1w','900',this)">Black</button></div>
+            <input type="hidden" id="b1w" value="700">
+          </div>
+          <div class="sr"><div class="sr-t"><span>行間距</span><span class="sv" id="b1lsV">1.4x</span></div>
+            <input type="range" min="10" max="28" value="14" id="b1ls" oninput="document.getElementById('b1lsV').textContent=(this.value/10).toFixed(1)+'x';render()"></div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b1xV">470</span></div>
+              <input type="range" min="0" max="1850" value="470" id="b1x" oninput="upd('b1x','b1xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="b1yV">740</span></div>
+              <input type="range" min="40" max="1040" value="740" id="b1y" oninput="upd('b1y','b1yV','');render()"></div>
+          </div>
+        </div>
+
+        <!-- 細項說明：黑體亮白 -->
+        <div class="txt-block">
+          <div class="txt-block-label">細項說明<span class="tag tag-sans">黑體 Sans · 亮白</span></div>
+          <div>
+            <label class="fl">文字</label>
+            <input type="text" id="b2txt" value="最佳新雜誌、最佳童書獎入選、最佳網路專輯獎" oninput="render()">
+          </div>
+          <div class="cr">
+            <div class="cs"><div class="cp" id="b2cp" style="background:#ffffff"></div>
+              <input type="color" value="#ffffff" id="b2c" oninput="sc('b2c','b2cp','b2cx');render()"></div>
+            <span class="cx" id="b2cx">#FFFFFF</span>
+          </div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="b2szV">56px</span></div>
+            <input type="range" min="14" max="80" value="56" id="b2sz" oninput="upd('b2sz','b2szV','px');render()"></div>
+          <div>
+            <label class="fl">字重</label>
+            <div class="wg" id="b2wg"><button class="wb" onclick="setW('b2w','300',this)">細</button><button class="wb" onclick="setW('b2w','400',this)">Regular</button><button class="wb on" onclick="setW('b2w','500',this)">Medium</button><button class="wb" onclick="setW('b2w','700',this)">粗</button><button class="wb" onclick="setW('b2w','900',this)">Black</button></div>
+            <input type="hidden" id="b2w" value="500">
+          </div>
+          <div class="g2">
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b2xV">470</span></div>
+              <input type="range" min="0" max="1850" value="470" id="b2x" oninput="upd('b2x','b2xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="b2yV">920</span></div>
+              <input type="range" min="40" max="1040" value="920" id="b2y" oninput="upd('b2y','b2yV','');render()"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GLOBAL -->
+    <div class="sec">
+      <div class="sec-hd" onclick="toggle(this)">
+        <div class="sec-lbl">⚙️ 全域</div><span class="arr o">▼</span>
+      </div>
+      <div class="sec-body o">
+        <div class="trow"><span class="tlabel">文字陰影</span>
+          <button class="tog on" id="shTog" onclick="toggleShadow()"></button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div class="carea">
+  <div class="topbar">
+    <span class="tinfo" id="tinfo">1920 × 1080 ｜ 請上傳底圖</span>
+    <button class="btn-dl" onclick="dl()">⬇ 下載 PNG 1920×1080</button>
+  </div>
+  <div class="cwrap"><canvas id="c" width="1920" height="1080"></canvas></div>
+</div>
+</div>
+
+<script>
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+let bgImg=null, prodImg=null, prod2Img=null, shadowOn=true;
+
+function toggle(hd){
+  const b=hd.nextElementSibling,a=hd.querySelector('.arr');
+  const o=b.classList.toggle('o');a.classList.toggle('o',o);
+}
+function upd(id,vid,sfx){document.getElementById(vid).textContent=document.getElementById(id).value+sfx;}
+function sc(cid,pid,xid){
+  const v=document.getElementById(cid).value;
+  document.getElementById(pid).style.background=v;
+  document.getElementById(xid).textContent=v.toUpperCase();
+}
+function setSw(cid,pid,xid,hex,el){
+  document.getElementById(cid).value=hex;
+  sc(cid,pid,xid);
+  el.closest('.swatches').querySelectorAll('.sw').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  render();
+}
+function setW(wid,val,el){
+  document.getElementById(wid).value=val;
+  el.closest('.wg').querySelectorAll('.wb').forEach(e=>e.classList.remove('on'));
+  el.classList.add('on');
+  render();
+}
+function toggleShadow(){shadowOn=!shadowOn;document.getElementById('shTog').classList.toggle('on',shadowOn);render();}
+
+function loadImg(file,type){
+  const isProd = type==='prod';
+  if(!file||!file.type.startsWith('image/'))return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      if(type==='prod2'){prod2Img=img;document.getElementById('prod2Name').textContent='✓ '+file.name;document.getElementById('prod2Drop').classList.add('loaded');}
+      else if(isProd){prodImg=img;document.getElementById('prodName').textContent='✓ '+file.name;document.getElementById('prodDrop').classList.add('loaded');}
+      else{bgImg=img;document.getElementById('bgName').textContent='✓ '+file.name;document.getElementById('bgDrop').classList.add('loaded');document.getElementById('tinfo').textContent='1920×1080 ｜ '+file.name;}
+      render();
+    };
+    img.src=e.target.result;
+  };
+  r.readAsDataURL(file);
+}
+['bgDrop','prodDrop','prod2Drop'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('over');});
+  el.addEventListener('dragleave',e=>{if(!el.contains(e.relatedTarget))el.classList.remove('over');});
+  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('over');loadImg(e.dataTransfer.files[0], id==='prodDrop'?'prod':id==='prod2Drop'?'prod2':'bg');});
+});
+
+const TPLS={
+  award:{
+    t0txt:'狂賀！',t0c:'#e8b84b',
+    t1txt:'2026金鼎獎',t1c:'#e8b84b',
+    a1txt:'親子天下有聲故事書榮獲',a1c:'#c9973a',
+    a2txt:'2026金鼎獎，數位出版類：數位創新獎',a2c:'#ffffff',
+    b1txt:'〈親子天下〉、〈小行星幼兒誌〉、|〈真的？假的？破解假訊息的數位思辨力〉',b1c:'#c9973a',
+    b2txt:'最佳新雜誌、最佳童書獎入選、最佳網路專輯獎',b2c:'#ffffff'
+  },
+  book:{
+    t0txt:'新書上市',t0c:'#ff6b6b',
+    t1txt:'2026最強童書',t1c:'#ffffff',
+    a1txt:'親子天下強力推薦',a1c:'#e8b84b',
+    a2txt:'榮登各大書店排行榜 NO.1',a2c:'#ffffff',
+    b1txt:'適合 5–12 歲 ｜ 全彩精裝',b1c:'#e8b84b',
+    b2txt:'現在訂購享 79 折優惠',b2c:'#ffffff'
+  }
+};
+function applyTpl(key){
+  const t=TPLS[key];
+  Object.entries(t).forEach(([k,v])=>{
+    const el=document.getElementById(k);if(!el)return;
+    el.value=v;
+    if(el.type==='color'){
+      const pid=k.replace(/c$/,'cp'),xid=k.replace(/c$/,'cx');
+      if(document.getElementById(pid))document.getElementById(pid).style.background=v;
+      if(document.getElementById(xid))document.getElementById(xid).textContent=v.toUpperCase();
+    }
+  });
+  document.getElementById('tpl-award').classList.toggle('on',key==='award');
+  document.getElementById('tpl-book').classList.toggle('on',key==='book');
+  render();
+}
+
+const gv=id=>document.getElementById(id).value;
+const gn=id=>parseFloat(document.getElementById(id).value)||0;
+
+function shad(sz){
+  if(shadowOn){ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=sz*.15;ctx.shadowOffsetX=2;ctx.shadowOffsetY=3;}
+  else{ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;}
+}
+function noShad(){ctx.shadowColor='transparent';ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;}
+
+
+  // ── 中英數視覺補償渲染 ──
+  // 自動偵測英數字元，字級放大 12%，逐字繪製
+  function drawMixed(text, x, y, baseSz, fontWeight, fontFamily, color) {
+    const boost = 1.12; // 英數放大比例
+    let curX = x;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const isLatinOrNum = /[A-Za-z0-9]/.test(ch);
+      const sz = isLatinOrNum ? Math.round(baseSz * boost) : baseSz;
+      // 英數字元垂直微調：放大後基線下移補償
+      const yAdj = isLatinOrNum ? Math.round((sz - baseSz) * 0.15) : 0;
+      ctx.font = `${fontWeight} ${sz}px ${fontFamily}`;
+      shad(sz);
+      ctx.fillStyle = color;
+      ctx.fillText(ch, curX, y + yAdj);
+      curX += ctx.measureText(ch).width;
+    }
+    // 回傳總寬度供外部參考
+    return curX - x;
+  }
+
+  // 多行版本（書名列用）
+  function drawMixedLines(lines, x, startY, baseSz, ls, fontWeight, fontFamily, color) {
+    let y = startY;
+    lines.forEach(line => {
+      drawMixed(line, x, y, baseSz, fontWeight, fontFamily, color);
+      y += baseSz * ls;
+    });
+  }
+
+function render(){
+  const W=1920,H=1080;
+  ctx.clearRect(0,0,W,H);
+
+  // BG
+  if(bgImg){
+    const s=Math.max(W/bgImg.naturalWidth,H/bgImg.naturalHeight);
+    const dw=bgImg.naturalWidth*s,dh=bgImg.naturalHeight*s;
+    ctx.drawImage(bgImg,(W-dw)/2,(H-dh)/2,dw,dh);
+  } else {
+    const g=ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#ff2d8a');g.addColorStop(0.5,'#e8007d');g.addColorStop(1,'#b5005e');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,255,255,0.1)';ctx.font='bold 28px "Noto Sans TC"';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('← 請上傳底圖',W/2,H/2);
+  }
+
+  // PRODUCT
+  if(prodImg){
+    const sc=gn('pS')/100,maxH=H*.82;
+    const ph=Math.min(prodImg.naturalHeight*(sc*(H/800)),maxH);
+    const pw=prodImg.naturalWidth*(ph/prodImg.naturalHeight);
+    ctx.drawImage(prodImg,gn('pX')-pw/2,(H-ph)/2+gn('pY'),pw,ph);
+  }
+
+
+  // PRODUCT 2
+  if(prod2Img){
+    const sc2=gn('p2S')/100, maxH2=H*.82;
+    const ph2=Math.min(prod2Img.naturalHeight*(sc2*(H/800)),maxH2);
+    const pw2=prod2Img.naturalWidth*(ph2/prod2Img.naturalHeight);
+    ctx.drawImage(prod2Img,gn('p2X')-pw2/2,(H-ph2)/2+gn('p2Y'),pw2,ph2);
+  }
+
+  ctx.textBaseline='alphabetic';
+  ctx.textAlign='left';
+
+  // ── 狂賀！明體 ──
+  {
+    const sz=gn('t0sz');
+    ctx.font=`${gv('t0w')} ${sz}px "Noto Serif TC", serif`;
+    shad(sz);ctx.fillStyle=gv('t0c');
+    ctx.fillText(gv('t0txt'),gn('t0x'),gn('t0y'));
+  }
+
+  // ── 獎項名 黑體 ──
+  {
+    const sz=gn('t1sz');
+    drawMixed(gv('t1txt'),gn('t1x'),gn('t1y'),sz,gv('t1w'),'"Noto Sans TC", sans-serif',gv('t1c'));
+  }
+
+  // ── 得獎資訊1 第1行：明體霧面金 ──
+  {
+    const sz=gn('a1sz');
+    drawMixed(gv('a1txt'),gn('a1x'),gn('a1y'),sz,gv('a1w'),'"Noto Serif TC", serif',gv('a1c'));
+  }
+
+  // ── 得獎資訊1 第2行：黑體細白 ──
+  {
+    const sz=gn('a2sz');
+    drawMixed(gv('a2txt'),gn('a2x'),gn('a2y'),sz,gv('a2w'),'"Noto Sans TC", sans-serif',gv('a2c'));
+  }
+
+  // ── 得獎資訊2 書名列：明體霧面金，| 換行 ──
+  {
+    const sz=gn('b1sz'),ls=gn('b1ls')/10;
+    drawMixedLines(gv('b1txt').split('|'),gn('b1x'),gn('b1y'),sz,ls,gv('b1w'),'"Noto Serif TC", serif',gv('b1c'));
+  }
+
+  // ── 得獎資訊2 細項：黑體細白 ──
+  {
+    const sz=gn('b2sz');
+    drawMixed(gv('b2txt'),gn('b2x'),gn('b2y'),sz,gv('b2w'),'"Noto Sans TC", sans-serif',gv('b2c'));
+  }
+  noShad();
+}
+
+function dl(){
+  render();
+  const a=document.createElement('a');
+  a.download='banner_1920x1080.png';
+  a.href=cv.toDataURL('image/png');
+  a.click();
+}
+
+
+
+  function loadDefaultBook(src, isProd2) {
+    const img = new Image();
+    img.onload = () => {
+      if(isProd2){
+        prod2Img = img;
+        document.getElementById('prod2Name').textContent = '✓ ' + src + '（預設）';
+        document.getElementById('prod2Drop').classList.add('loaded');
+      } else {
+        prodImg = img;
+        document.getElementById('prodName').textContent = '✓ ' + src + '（預設）';
+        document.getElementById('prodDrop').classList.add('loaded');
+      }
+      render();
+    };
+    img.onerror = () => { render(); };
+    img.src = './' + src;
+  }
+
+  // 自動載入預設底圖（放在同目錄的 bg.jpg）
+  function loadDefaultBg() {
+    const img = new Image();
+    img.onload = () => {
+      bgImg = img;
+      document.getElementById('bgName').textContent = '✓ bg.jpg（預設底圖）';
+      document.getElementById('bgDrop').classList.add('loaded');
+      document.getElementById('tinfo').textContent = '1920×1080 ｜ bg.jpg（預設底圖）';
+      render();
+    };
+    img.onerror = () => {
+      // 找不到 bg.jpg 就顯示預設漸層，不報錯
+      render();
+    };
+    img.src = './bg.jpg';
+  }
+
+if(document.fonts&&document.fonts.load){
+  Promise.all([
+    document.fonts.load('900 80px "Noto Serif TC"'),
+    document.fonts.load('700 60px "Noto Serif TC"'),
+    document.fonts.load('900 60px "Noto Sans TC"'),
+    document.fonts.load('300 40px "Noto Sans TC"')
+  ]).then(()=>{ loadDefaultBg(); loadDefaultBook('book1.png', false); loadDefaultBook('book2.webp', true); });
+}else{setTimeout(()=>{ loadDefaultBg(); loadDefaultBook('book1.png',false); loadDefaultBook('book2.webp',true); },1500);}
+</script>
+</body>
+</html>
