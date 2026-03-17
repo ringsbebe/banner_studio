@@ -154,11 +154,11 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
           <div class="dz-icon">📦</div><div class="dz-text">拖曳或點擊上傳書封</div>
           <div class="dz-name" id="prodName"></div>
         </div>
-        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="pSV">70%</span></div>
-          <input type="range" min="10" max="150" value="70" id="pS" oninput="upd('pS','pSV','%');render()"></div>
+        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="pSV">17%</span></div>
+          <input type="range" min="10" max="150" value="17" id="pS" oninput="upd('pS','pSV','%');render()"></div>
         <div class="g2">
-          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="pXV">280</span></div>
-            <input type="range" min="-200" max="1000" value="280" id="pX" oninput="upd('pX','pXV','');render()"></div>
+          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="pXV">458</span></div>
+            <input type="range" min="-200" max="1000" value="458" id="pX" oninput="upd('pX','pXV','');render()"></div>
           <div class="sr"><div class="sr-t"><span>垂直位移 Y</span><span class="sv" id="pYV">0</span></div>
             <input type="range" min="-400" max="400" value="0" id="pY" oninput="upd('pY','pYV','');render()"></div>
         </div>
@@ -177,13 +177,13 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
           <div class="dz-icon">📗</div><div class="dz-text">拖曳或點擊上傳第二本書封</div>
           <div class="dz-name" id="prod2Name"></div>
         </div>
-        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="p2SV">70%</span></div>
-          <input type="range" min="10" max="150" value="70" id="p2S" oninput="upd('p2S','p2SV','%');render()"></div>
+        <div class="sr"><div class="sr-t"><span>縮放</span><span class="sv" id="p2SV">22%</span></div>
+          <input type="range" min="10" max="150" value="22" id="p2S" oninput="upd('p2S','p2SV','%');render()"></div>
         <div class="g2">
-          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="p2XV">500</span></div>
-            <input type="range" min="-200" max="1000" value="500" id="p2X" oninput="upd('p2X','p2XV','');render()"></div>
-          <div class="sr"><div class="sr-t"><span>垂直位移 Y</span><span class="sv" id="p2YV">0</span></div>
-            <input type="range" min="-400" max="400" value="0" id="p2Y" oninput="upd('p2Y','p2YV','');render()"></div>
+          <div class="sr"><div class="sr-t"><span>水平中心 X</span><span class="sv" id="p2XV">458</span></div>
+            <input type="range" min="-200" max="1000" value="458" id="p2X" oninput="upd('p2X','p2XV','');render()"></div>
+          <div class="sr"><div class="sr-t"><span>垂直位移 Y</span><span class="sv" id="p2YV">261</span></div>
+            <input type="range" min="-400" max="400" value="261" id="p2Y" oninput="upd('p2Y','p2YV','');render()"></div>
         </div>
       </div>
     </div>
@@ -220,8 +220,8 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
             <input type="hidden" id="t0w" value="900">
           </div>
           <div class="g2">
-            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t0xV">25</span></div>
-              <input type="range" min="0" max="1850" value="25" id="t0x" oninput="upd('t0x','t0xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t0xV">120</span></div>
+              <input type="range" min="0" max="1850" value="120" id="t0x" oninput="upd('t0x','t0xV','');render()"></div>
             <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="t0yV">330</span></div>
               <input type="range" min="40" max="1040" value="330" id="t0y" oninput="upd('t0y','t0yV','');render()"></div>
           </div>
@@ -244,16 +244,16 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
               <div class="sw" style="background:#FFEA00" onclick="setSw('t1c','t1cp','t1cx','#FFEA00',this)"></div>
             </div>
           </div>
-          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="t1szV">165px</span></div>
-            <input type="range" min="30" max="220" value="165" id="t1sz" oninput="upd('t1sz','t1szV','px');render()"></div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="t1szV">107px</span></div>
+            <input type="range" min="30" max="220" value="107" id="t1sz" oninput="upd('t1sz','t1szV','px');render()"></div>
           <div>
             <label class="fl">字重</label>
             <div class="wg" id="t1wg"><button class="wb" onclick="setW('t1w','300',this)">細</button><button class="wb" onclick="setW('t1w','400',this)">Regular</button><button class="wb" onclick="setW('t1w','500',this)">Medium</button><button class="wb" onclick="setW('t1w','700',this)">粗</button><button class="wb on" onclick="setW('t1w','900',this)">Black</button></div>
             <input type="hidden" id="t1w" value="900">
           </div>
           <div class="g2">
-            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t1xV">604</span></div>
-              <input type="range" min="0" max="1850" value="604" id="t1x" oninput="upd('t1x','t1xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="t1xV">670</span></div>
+              <input type="range" min="0" max="1850" value="670" id="t1x" oninput="upd('t1x','t1xV','');render()"></div>
             <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="t1yV">338</span></div>
               <input type="range" min="40" max="1040" value="338" id="t1y" oninput="upd('t1y','t1yV','');render()"></div>
           </div>
@@ -287,8 +287,8 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
               <div class="sw" style="background:#ffffff" onclick="setSw('a1c','a1cp','a1cx','#ffffff',this)"></div>
             </div>
           </div>
-          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="a1szV">90px</span></div>
-            <input type="range" min="20" max="140" value="90" id="a1sz" oninput="upd('a1sz','a1szV','px');render()"></div>
+          <div class="sr"><div class="sr-t"><span>字級</span><span class="sv" id="a1szV">81px</span></div>
+            <input type="range" min="20" max="140" value="81" id="a1sz" oninput="upd('a1sz','a1szV','px');render()"></div>
           <div>
             <label class="fl">字重</label>
             <div class="wg" id="a1wg"><button class="wb" onclick="setW('a1w','300',this)">細</button><button class="wb" onclick="setW('a1w','400',this)">Regular</button><button class="wb" onclick="setW('a1w','500',this)">Medium</button><button class="wb on" onclick="setW('a1w','700',this)">粗</button><button class="wb" onclick="setW('a1w','900',this)">Black</button></div>
@@ -364,11 +364,11 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
             <div class="wg" id="b1wg"><button class="wb" onclick="setW('b1w','300',this)">細</button><button class="wb" onclick="setW('b1w','400',this)">Regular</button><button class="wb" onclick="setW('b1w','500',this)">Medium</button><button class="wb on" onclick="setW('b1w','700',this)">粗</button><button class="wb" onclick="setW('b1w','900',this)">Black</button></div>
             <input type="hidden" id="b1w" value="700">
           </div>
-          <div class="sr"><div class="sr-t"><span>行間距</span><span class="sv" id="b1lsV">1.4x</span></div>
+          <div class="sr"><div class="sr-t"><span>行間距</span><span class="sv" id="b1lsV">1.3x</span></div>
             <input type="range" min="10" max="28" value="14" id="b1ls" oninput="document.getElementById('b1lsV').textContent=(this.value/10).toFixed(1)+'x';render()"></div>
           <div class="g2">
-            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b1xV">470</span></div>
-              <input type="range" min="0" max="1850" value="470" id="b1x" oninput="upd('b1x','b1xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b1xV">577</span></div>
+              <input type="range" min="0" max="1850" value="577" id="b1x" oninput="upd('b1x','b1xV','');render()"></div>
             <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="b1yV">740</span></div>
               <input type="range" min="40" max="1040" value="740" id="b1y" oninput="upd('b1y','b1yV','');render()"></div>
           </div>
@@ -394,8 +394,8 @@ canvas{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px;box-s
             <input type="hidden" id="b2w" value="500">
           </div>
           <div class="g2">
-            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b2xV">470</span></div>
-              <input type="range" min="0" max="1850" value="470" id="b2x" oninput="upd('b2x','b2xV','');render()"></div>
+            <div class="sr"><div class="sr-t"><span>X</span><span class="sv" id="b2xV">624</span></div>
+              <input type="range" min="0" max="1850" value="624" id="b2x" oninput="upd('b2x','b2xV','');render()"></div>
             <div class="sr"><div class="sr-t"><span>Y</span><span class="sv" id="b2yV">920</span></div>
               <input type="range" min="40" max="1040" value="920" id="b2y" oninput="upd('b2y','b2yV','');render()"></div>
           </div>
